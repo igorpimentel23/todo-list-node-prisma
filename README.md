@@ -63,8 +63,7 @@ The project follows **Clean Architecture** principles with clear separation of r
 
 #### 1. Clone the Repository
 ```bash
-git clone git@github.com:igorpimentel23/todo-list-node-prisma.git
-cd todo-list-backend
+git clone git@github.com:igorpimentel23/todo-list-node-prisma.git && cd todo-list-backend
 ```
 
 #### 2. Copy Environment File
