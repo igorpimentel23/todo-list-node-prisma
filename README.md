@@ -63,85 +63,89 @@ The project follows **Clean Architecture** principles with clear separation of r
 
 #### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone git@github.com:igorpimentel23/todo-list-node-prisma.git
 cd todo-list-backend
 ```
 
-#### 2. Configure Environment Variables
+#### 2. Copy Environment File
 ```bash
-# Copy the example file
 cp .env.example .env
 ```
 
 #### 3. Start Database with Docker
 ```bash
-# Start MySQL in container
 docker compose up -d
-
-# Wait a few seconds for database to initialize
-sleep 10
 ```
+> **Note**: Wait a few seconds for the database to initialize before proceeding to the next step.
 
 #### 4. Configure Database Permissions (First time)
 ```bash
-# Grant necessary permissions to docker user
 docker exec -it todo-list-node-prisma-api-todo-mysql-1 mysql -u root -pdocker -e "GRANT ALL PRIVILEGES ON *.* TO 'docker'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 ```
 
 #### 5. Run Prisma Migrations
 ```bash
-# Generate and apply migrations
 npx prisma migrate dev
+```
 
-# Generate Prisma client
+#### 6. Generate Prisma Client
+```bash
 npx prisma generate
 ```
 
-#### 6. Install Dependencies
+#### 7. Install Dependencies
 ```bash
 yarn install
 ```
 
-#### 7. Start the Application
+#### 8. Start the Application (Development Mode)
 ```bash
-# Development mode
 yarn dev
+```
 
-# Or production mode
+#### 9. Start the Application (Production Mode)
+```bash
 yarn build
 yarn start
 ```
 
-#### 8. Verify it's Working
+#### 10. Verify it's Working
 ```bash
-# Test the API
 curl http://localhost:3333/tasks
 ```
 
-#### 9. (Optional) Start Prisma Studio
+#### 11. (Optional) Start Prisma Studio
 ```bash
-# Open database GUI in browser
 npx prisma studio
 ```
 This will open Prisma Studio at `http://localhost:5555` where you can view and edit your database directly.
 
 ### 🛠️ Useful Docker Commands
 
+#### Stop Services
 ```bash
-# Stop services
 docker compose down
+```
 
-# Stop and remove volumes (complete reset)
+#### Stop and Remove Volumes (Complete Reset)
+```bash
 docker compose down -v
+```
 
-# View database logs
+#### View Database Logs
+```bash
 docker compose logs api-todo-mysql
+```
 
-# Access MySQL directly
+#### Access MySQL Directly
+```bash
 docker exec -it todo-list-node-prisma-api-todo-mysql-1 mysql -u docker -pdocker api-todo
+```
 
-# Open Prisma Studio (database GUI)
+#### Open Prisma Studio (Database GUI)
+```bash
 npx prisma studio
+```
 
 ## 📁 Code Structure
 
