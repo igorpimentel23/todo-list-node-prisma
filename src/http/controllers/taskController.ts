@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
+import { Colors } from '@/Enums/Colors';
 import { PrismaTasksRepository } from '@/repositories/prisma/tasksRepository';
 import { CreateTaskUseCase } from '@/useCases/createTask';
 import { DeleteTaskUseCase } from '@/useCases/deleteTask';
@@ -8,12 +9,12 @@ import { UpdateTaskUseCase } from '@/useCases/updateTask';
 
 const createTaskSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  color: z.string().min(1, 'Color is required'),
+  color: z.enum(Colors),
 });
 
 const updateTaskSchema = z.object({
   title: z.string().min(1, 'Title is required').optional(),
-  color: z.string().min(1, 'Color is required').optional(),
+  color: z.enum(Colors).optional(),
   completed: z.boolean().optional(),
 });
 
