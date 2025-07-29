@@ -2,6 +2,24 @@
 
 Backend API for Todo List application built with Express.js, Prisma and MySQL, following Clean Architecture principles.
 
+## 📑 Table of Contents
+
+- [🚀 Technologies](#-technologies)
+- [🏗️ Architecture](#️-architecture)
+  - [📋 Application Layers](#-application-layers)
+  - [🎯 Architecture Benefits](#-architecture-benefits)
+- [🐳 Starting the Project with Docker](#-starting-the-project-with-docker)
+  - [Prerequisites](#prerequisites)
+  - [Step by Step](#step-by-step)
+  - [🛠️ Useful Docker Commands](#️-useful-docker-commands)
+- [📁 Code Structure](#-code-structure)
+  - [🔧 Layer Details](#-layer-details)
+- [📚 API Endpoints](#-api-endpoints)
+- [🗄️ Database Structure](#️-database-structure)
+- [🚀 Available Scripts](#-available-scripts)
+- [📝 Validations](#-validations)
+- [📄 License](#-license)
+
 ## 🚀 Technologies
 
 - **Node.js** with TypeScript
