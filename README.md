@@ -171,23 +171,26 @@ src/
 ├── http/                    # HTTP presentation layer
 │   ├── controllers/         # Route controllers
 │   │   └── taskController.ts
-│   └── routes/             # Route definitions
+│   └── routes/              # Route definitions
 │       └── taskRoutes.ts
-├── useCases/               # Use cases (business logic)
-│   ├── createTask.ts       # Create task
-│   ├── findAll.ts          # List tasks
-│   ├── updateTask.ts       # Update task
-│   └── deleteTask.ts       # Delete task
-├── repositories/           # Data access layer
-│   ├── tasksRepository.ts  # Repository interface
-│   └── prisma/            # Prisma implementation
+├── useCases/                # Use cases (business logic)
+│   ├── createTask.ts        # Create task
+│   ├── findAll.ts           # List tasks
+│   ├── show.ts              # Show single task
+│   ├── updateTask.ts        # Update task
+│   └── deleteTask.ts        # Delete task
+├── repositories/            # Data access layer
+│   ├── tasksRepository.ts   # Repository interface
+│   └── prisma/              # Prisma implementation
 │       └── tasksRepository.ts
-├── lib/                   # Libraries and configurations
-│   └── prisma.ts          # Prisma client
-├── env/                   # Environment configuration
+├── Enums/                   # Enum definitions
+│   └── Colors.ts            # Color enum for tasks
+├── lib/                     # Libraries and configurations
+│   └── prisma.ts            # Prisma client
+├── env/                     # Environment configuration
 │   └── index.ts
-├── app.ts                 # Express configuration
-└── server.ts              # Entry point
+├── app.ts                   # Express configuration
+└── server.ts                # Entry point
 ```
 
 ### 🔧 Layer Details
@@ -207,12 +210,17 @@ src/
 - **Implementation**: Prisma for database operations
 - **Abstraction**: Allows easy implementation swapping
 
+#### Enums Layer
+- **Responsibility**: Define shared constants and types
+- **Colors**: Enum for task color options
+- **Reusability**: Used across different layers
+
 ## 📚 API Endpoints
 
 ### GET /tasks
 List all tasks ordered by creation date (newest first).
 
-**Response:**
+**Response:** `200 OK`
 ```json
 [
   {
@@ -226,6 +234,29 @@ List all tasks ordered by creation date (newest first).
 ]
 ```
 
+### GET /tasks/:id
+Get a specific task by ID.
+
+**Parameters:**
+- `id` (UUID) - Task identifier
+
+**Response:** `200 OK`
+```json
+{
+  "id": "uuid",
+  "title": "Example task",
+  "color": "red",
+  "completed": false,
+  "createdAt": "2024-01-01T00:00:00.000Z",
+  "updatedAt": "2024-01-01T00:00:00.000Z"
+}
+```
+
+**Error Responses:**
+- `400 Bad Request` - Invalid UUID format
+- `404 Not Found` - Task not found
+- `500 Internal Server Error` - Server error
+
 ### POST /tasks
 Create a new task.
 
@@ -237,7 +268,14 @@ Create a new task.
 }
 ```
 
-**Response:**
+**Validation:**
+- `title` (string, required) - Task title (minimum 1 character)
+- `color` (enum, required) - Task color (see available colors below)
+
+**Available Colors:**
+- `red`, `blue`, `green`, `yellow`, `purple`, `orange`, `pink`, `brown`, `gray`, `black`, `white`
+
+**Response:** `201 Created`
 ```json
 {
   "id": "uuid",
@@ -249,8 +287,15 @@ Create a new task.
 }
 ```
 
+**Error Responses:**
+- `400 Bad Request` - Validation error
+- `500 Internal Server Error` - Server error
+
 ### PUT /tasks/:id
 Update an existing task.
+
+**Parameters:**
+- `id` (UUID) - Task identifier
 
 **Body:**
 ```json
@@ -261,7 +306,12 @@ Update an existing task.
 }
 ```
 
-**Response:**
+**Validation:**
+- `title` (string, optional) - Task title (minimum 1 character)
+- `color` (enum, optional) - Task color (see available colors above)
+- `completed` (boolean, optional) - Task completion status
+
+**Response:** `200 OK`
 ```json
 {
   "id": "uuid",
@@ -273,10 +323,23 @@ Update an existing task.
 }
 ```
 
+**Error Responses:**
+- `400 Bad Request` - Validation error or invalid UUID
+- `404 Not Found` - Task not found
+- `500 Internal Server Error` - Server error
+
 ### DELETE /tasks/:id
 Remove a task.
 
-**Response:** 204 No Content
+**Parameters:**
+- `id` (UUID) - Task identifier
+
+**Response:** `204 No Content`
+
+**Error Responses:**
+- `400 Bad Request` - Invalid UUID format
+- `404 Not Found` - Task not found
+- `500 Internal Server Error` - Server error
 
 ## 🗄️ Database Structure
 
@@ -300,9 +363,28 @@ Remove a task.
 
 ## 📝 Validations
 
-- **Title**: Required field, non-empty string
-- **Color**: Required field, non-empty string
-- **Completed**: Optional field, boolean
+### Request Body Validations
+
+#### Create Task (POST /tasks)
+- **title** (string, required): Task title with minimum 1 character
+- **color** (enum, required): Must be one of the predefined colors
+
+#### Update Task (PUT /tasks/:id)
+- **title** (string, optional): Task title with minimum 1 character
+- **color** (enum, optional): Must be one of the predefined colors
+- **completed** (boolean, optional): Task completion status
+
+### Available Colors
+The following colors are accepted for task creation and updates:
+- `red`, `blue`, `green`, `yellow`, `purple`, `orange`, `pink`, `brown`, `gray`, `black`, `white`
+
+### Parameter Validations
+- **id** (UUID, required): Valid UUID format for task identification in routes that require it
+
+### Error Handling
+- **400 Bad Request**: Validation errors (invalid data format, missing required fields)
+- **404 Not Found**: Task not found when trying to access, update, or delete
+- **500 Internal Server Error**: Unexpected server errors
 
 ## 📄 License
 
