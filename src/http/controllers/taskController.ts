@@ -19,7 +19,7 @@ const updateTaskSchema = z.object({
   completed: z.boolean().optional(),
 });
 
-const showTaskSchema = z.object({
+const idTaskSchema = z.object({
   id: z.uuid(),
 });
 
@@ -40,7 +40,7 @@ export const taskController = {
 
   async show(req: Request, res: Response) {
     try {
-      const { id } = showTaskSchema.parse(req.params);
+      const { id } = idTaskSchema.parse(req.params);
 
       const showTaskUseCase = new ShowTaskUseCase(new PrismaTasksRepository());
       const task = await showTaskUseCase.execute(id);
@@ -86,7 +86,7 @@ export const taskController = {
 
   async update(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = idTaskSchema.parse(req.params);
       const updateData = updateTaskSchema.parse(req.body);
 
       const updateTaskUseCase = new UpdateTaskUseCase(
@@ -118,7 +118,7 @@ export const taskController = {
 
   async delete(req: Request, res: Response) {
     try {
-      const { id } = req.params;
+      const { id } = idTaskSchema.parse(req.params);
 
       const deleteTaskUseCase = new DeleteTaskUseCase(
         new PrismaTasksRepository(),
