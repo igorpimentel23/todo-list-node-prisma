@@ -13,6 +13,14 @@ export class PrismaTasksRepository implements ITasksRepository {
     return tasks as TaskType[];
   }
 
+  async findById(id: string): Promise<TaskType> {
+    const task = await prisma.task.findUnique({
+      where: { id },
+    });
+
+    return task as TaskType;
+  }
+
   async create(data: Prisma.TaskCreateInput): Promise<TaskType> {
     const task = await prisma.task.create({
       data,

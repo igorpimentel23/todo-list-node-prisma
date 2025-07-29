@@ -5,6 +5,7 @@ import { PrismaTasksRepository } from '@/repositories/prisma/tasksRepository';
 import { CreateTaskUseCase } from '@/useCases/createTask';
 import { DeleteTaskUseCase } from '@/useCases/deleteTask';
 import { FindAllTasksUseCase } from '@/useCases/findAll';
+import { ShowTaskUseCase } from '@/useCases/show';
 import { UpdateTaskUseCase } from '@/useCases/updateTask';
 
 const createTaskSchema = z.object({
@@ -18,6 +19,10 @@ const updateTaskSchema = z.object({
   completed: z.boolean().optional(),
 });
 
+const showTaskSchema = z.object({
+  id: z.uuid(),
+});
+
 export const taskController = {
   async list(req: Request, res: Response) {
     try {
@@ -29,6 +34,26 @@ export const taskController = {
       return res.json(tasks);
     } catch (error) {
       console.error('Error listing tasks:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+  },
+
+  async show(req: Request, res: Response) {
+    try {
+      const { id } = showTaskSchema.parse(req.params);
+
+      const showTaskUseCase = new ShowTaskUseCase(new PrismaTasksRepository());
+      const task = await showTaskUseCase.execute(id);
+
+      return res.json(task);
+    } catch (error) {
+      console.error('Error showing task:', error);
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: 'Validation error', issues: error.format() });
+      }
+
       return res.status(500).json({ message: 'Internal server error' });
     }
   },
