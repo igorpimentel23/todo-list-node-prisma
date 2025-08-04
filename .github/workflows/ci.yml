@@ -48,9 +48,24 @@ jobs:
         run: yarn lint
 
       - name: Run tests with coverage
-        run: npx vitest --coverage.enabled true
+        run: yarn test:coverage
+
+      - name: Check coverage files
+        run: |
+          echo "Checking if coverage files exist..."
+          ls -la coverage/
+          if [ -f "coverage/coverage-summary.json" ]; then
+            echo "✅ coverage-summary.json found"
+            cat coverage/coverage-summary.json | head -20
+          else
+            echo "❌ coverage-summary.json not found"
+            echo "Available files in coverage/:"
+            ls -la coverage/ || echo "No coverage directory found"
+          fi
+
       - name: "Report Coverage"
-        # Set if: always() to also generate the report if tests are failing
-        # Only works if you set `reportOnFailure: true` in your vite config as specified above
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          jsonSummaryPath: "./coverage/coverage-summary.json"
+          fileCoverageMode: "changes"
