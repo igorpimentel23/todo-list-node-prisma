@@ -8,7 +8,8 @@
     "start": "node build/server.js",
     "build": "tsup src --out-dir build",
     "lint": "eslint",
-    "test": "vitest"
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "keywords": [
     "todo",
@@ -25,6 +26,8 @@
     "@types/cors": "2.8.19",
     "@types/express": "5.0.3",
     "@types/node": "24.1.0",
+    "@types/supertest": "^2.0.16",
+    "@vitest/coverage-v8": "3.2.4",
     "eslint": "9.32.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "10.1.8",
@@ -35,13 +38,12 @@
     "globals": "16.3.0",
     "jiti": "2.5.1",
     "prettier": "3.6.2",
+    "supertest": "^6.3.4",
     "tsup": "8.5.0",
     "tsx": "4.20.3",
     "typescript": "5.8.3",
     "typescript-eslint": "8.38.0",
-    "vitest": "^1.0.0",
-    "supertest": "^6.3.4",
-    "@types/supertest": "^2.0.16"
+    "vitest": "3.2.4"
   },
   "dependencies": {
     "@prisma/client": "6.12.0",

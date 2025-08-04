@@ -130,6 +130,12 @@ export const taskController = {
 
       return res.status(204).send();
     } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res
+          .status(400)
+          .json({ message: 'Validation error', issues: error.format() });
+      }
+
       if (
         error &&
         typeof error === 'object' &&

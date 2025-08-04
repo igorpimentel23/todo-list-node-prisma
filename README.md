@@ -75,7 +75,7 @@ The project follows **Clean Architecture** principles with clear separation of r
 
 ### Prerequisites
 - Docker and Docker Compose installed
-- Node.js 18+ (for local development)
+- Node.js 22.18.0+ (for local development)
 
 ### Step by Step
 

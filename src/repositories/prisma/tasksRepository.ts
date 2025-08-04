@@ -13,12 +13,12 @@ export class PrismaTasksRepository implements ITasksRepository {
     return tasks as TaskType[];
   }
 
-  async findById(id: string): Promise<TaskType> {
+  async findById(id: string): Promise<TaskType | null> {
     const task = await prisma.task.findUnique({
       where: { id },
     });
 
-    return task as TaskType;
+    return task;
   }
 
   async create(data: Prisma.TaskCreateInput): Promise<TaskType> {
