@@ -44,6 +44,9 @@ export const taskController = {
 
       const showTaskUseCase = new ShowTaskUseCase(new PrismaTasksRepository());
       const task = await showTaskUseCase.execute(id);
+      if (!task) {
+        return res.status(404).json({ message: 'Task not found' });
+      }
 
       return res.json(task);
     } catch (error) {
