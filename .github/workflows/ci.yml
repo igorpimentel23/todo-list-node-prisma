@@ -50,10 +50,21 @@ jobs:
       - name: Run tests with coverage
         run: yarn test:coverage
 
-      - name: Upload coverage reports
-        if: always()
-        uses: codecov/codecov-action@v5
+      - name: Check coverage files
+        run: |
+          echo "Checking if coverage files exist..."
+          ls -la coverage/
+          if [ -f "coverage/coverage-summary.json" ]; then
+            echo "✅ coverage-summary.json found"
+            cat coverage/coverage-summary.json | head -20
+          else
+            echo "❌ coverage-summary.json not found"
+            echo "Available files in coverage/:"
+            ls -la coverage/ || echo "No coverage directory found"
+          fi
+
+      - name: "Report Coverage"
+        if: always() && github.event_name == 'pull_request'
+        uses: davelosert/vitest-coverage-report-action@v2
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          verbose: true
+          jsonSummaryPath: "./coverage/coverage-summary.json"
