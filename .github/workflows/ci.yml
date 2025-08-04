@@ -48,12 +48,9 @@ jobs:
         run: yarn lint
 
       - name: Run tests with coverage
-        run: yarn test:coverage
-
-      - name: Upload coverage reports
+        run: npx vitest --coverage.enabled true
+      - name: "Report Coverage"
+        # Set if: always() to also generate the report if tests are failing
+        # Only works if you set `reportOnFailure: true` in your vite config as specified above
         if: always()
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          verbose: true
+        uses: davelosert/vitest-coverage-report-action@v2
